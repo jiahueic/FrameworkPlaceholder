@@ -1,0 +1,530 @@
+﻿@using AGTIV.Framework.MVC.UI.Web.Controllers
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <!-- Syncfusion Essential JS 2 Styles -->
+    <link rel="stylesheet" href="~/Content/ej2/material.css" />
+
+    <!-- Syncfusion Essential JS 2 Scripts -->
+    <script src="~/Scripts/ej2/ej2.min.js"></script>
+
+    <script src="~/admin-lte/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
+    <style type="text/css">
+        body {
+            background: #f2f3f8;
+            display: flex;
+            flex-direction: column;
+            color: #646c9a;
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+            font-size: 13px;
+            font-weight: 300;
+            font-family: Poppins;
+            -ms-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a {
+            text-decoration: none;
+            background-color: transparent;
+        }
+
+            a:hover {
+                text-decoration: none !important;
+            }
+
+        .ag-grid {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            -ms-flex: 1 0 0px;
+        }
+
+        .ag-grid-item {
+            flex: 1 0 auto;
+            max-width: 100%;
+            background-image: url('../../Image/bg-1.jpg');
+        }
+
+        .ag-login-signin {
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .ag-login-wrapper {
+            padding: 3% 2rem 1rem 2rem;
+            margin: 0 auto 2rem auto;
+            overflow: hidden;
+        }
+
+        .ag-login-container {
+            border: solid;
+            border-color: gray;
+            background-color: white;
+            padding: 30px 35px 30px 35px;
+            width: 430px;
+            margin: auto;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .ag-logo {
+            text-align: center;
+            margin: 0 auto 0 auto;
+        }
+
+        .ag-login {
+            display: block;
+        }
+
+        .ag-login-header {
+            /*text-align: center;*/
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .ag-login-title {
+            text-align: center;
+            /*font-size: 1.5rem;*/
+            font-weight: 500;
+            color: #595d6e;
+        }
+
+        .ag-login-desc {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: #74788d;
+        }
+
+        .ag-password {
+            margin-top: 10px !important;
+        }
+
+        .ag-login-extra {
+            margin-top: 10px;
+            margin-bottom: 15px;
+            color: #74788d;
+            font-size: 1rem;
+        }
+
+        .ag-login-checkbox {
+            display: inline-block;
+            position: relative;
+            /*padding-left: 30px;*/
+            margin-bottom: 10px;
+            text-align: left;
+            vertical-align: middle;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /*.login-checkbox > input {
+                position: absolute;
+                z-index: -1;
+                opacity: 0;
+            }
+
+        input[type="checkbox"] {
+            box-sizing: border-box;
+            padding: 0;
+        }
+
+        .login-checkbox > span {
+            border: 1px solid #d1d7e2;
+        }
+
+        .login-checkbox > span {
+            border-radius: 3px;
+            background: none;
+            position: absolute;
+            top: 1px;
+            left: 0;
+            height: 18px;
+            width: 18px;
+        }*/
+
+        .ag-login-forgot-link {
+            font-size: 1rem;
+            color: #74788d;
+            transition: color 0.3s ease;
+        }
+
+            .ag-login-forgot-link:hover {
+                color: #5d78ff;
+                transition: color 0.3s ease;
+            }
+
+        .ag-login-actions {
+            text-align: center;
+            margin-top: 4%;
+        }
+
+        .ag-login-button {
+            height: 50px;
+            padding-left: 2.5rem;
+            padding-right: 2.5rem;
+            box-shadow: 0px 4px 16px 0px rgba(93, 120, 255, 0.15);
+            transition: all 0.3s ease 0s;
+            background-color: #5d78ff;
+            border-color: #5d78ff;
+            color: #ffffff;
+        }
+
+        .ag-signup {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .ag-signup-msg {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #74788d;
+        }
+
+        .ag-signup-link {
+            font-size: 13px;
+            font-weight: 600;
+            color: #595d6e;
+            transition: color 0.3s ease;
+        }
+
+            .ag-signup-link:hover {
+                color: #5d78ff;
+                transition: color 0.3s ease;
+            }
+
+        .ag-login-forgot {
+            display: block;
+        }
+
+        .ag-login-button-cancel {
+            height: 50px;
+            padding-left: 2.5rem;
+            padding-right: 2.5rem;
+            box-shadow: 0px 4px 16px 0px rgba(93, 120, 255, 0.15);
+            transition: all 0.3s ease 0s;
+            background-color: #ffffff;
+            border-color: #ffffff;
+            color: #282a3c;
+        }
+
+        /*/* Section to Show Hide Forgot Password & Sign Up
+        .kt-login.kt-login--v3.kt-login--signin .kt-login__signup {
+            display: none;
+        }
+
+        .kt-login.kt-login--v3.kt-login--signin .kt-login__signin {
+            display: block;
+        }
+
+        .kt-login.kt-login--v3.kt-login--signin .kt-login__forgot {
+            display: none;
+        }
+
+        .kt-login.kt-login--v3.kt-login--signup .kt-login__signup {
+            display: block;
+        }
+
+        .kt-login.kt-login--v3.kt-login--signup .kt-login__signin {
+            display: none;
+        }
+
+        .kt-login.kt-login--v3.kt-login--signup .kt-login__forgot {
+            display: none;
+        }
+
+        .kt-login.kt-login--v3.kt-login--signup .kt-login__account {
+            display: none;
+        }
+
+        .kt-login.kt-login--v3.kt-login--forgot .kt-login__signup {
+            display: none;
+        }
+
+        .kt-login.kt-login--v3.kt-login--forgot .kt-login__signin {
+            display: none;
+        }
+
+        .kt-login.kt-login--v3.kt-login--forgot .kt-login__forgot {
+            display: block;
+        }*/
+    </style>
+</head>
+<!-- begin::Body -->
+<body>
+    <!-- begin:: Page -->
+    <div class="ag-grid">
+        <div class="ag-grid ag-login-signin kt-login kt-login--v3 kt-login--signin" id="ag_login">
+            <div class="ag-grid-item">
+                <div class="ag-login-wrapper">
+                    <div class="ag-login-container">
+                        <div class="ag-logo">
+                            <a href="#">
+                                <img src="~/Image/Untitled.png" />
+                            </a>
+                        </div>
+                        <div class="ag-login kt-login__signin">
+                            @RenderBody()
+                            <div class="ag-signup">
+                                @if (typeof(UserController).Name.Contains(ViewContext.RouteData.Values["controller"].ToString()))
+                                {
+                                    if (nameof(UserController.Signup).Contains(ViewContext.RouteData.Values["action"].ToString()))
+                                    {
+                                        <span class=".ag-signup-msg">
+                                            Already have an account?&nbsp; &nbsp;
+                                        </span>
+                                        @Html.ActionLink("Sign In!", "Login", "User", null, new { @class = "ag-signup-link" })
+                                    }
+                                    else
+                                    {
+                                        <span class=".ag-signup-msg">
+                                            Don't have an account yet ?&nbsp; &nbsp;
+                                        </span>
+                                        @Html.ActionLink("Sign Up!", "Signup", "User", null, new { @class = "ag-signup-link" })
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @RenderSection("scripts", required: false)
+
+    <!-- Syncfusion Essential JS 2 ScriptManager -->
+    @Html.EJS().ScriptManager()
+
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            $('#kt_login_forgot').click(function (e) {
+                e.preventDefault();
+                displayForgotForm();
+            });
+
+            $('#ag_login_forgot_cancel').click(function (e) {
+                e.preventDefault();
+                //displaySignInForm();
+
+                window.location.href = '@Url.Action("Login", "User")';
+            });
+
+            $('#kt_login_signup').click(function (e) {
+                e.preventDefault();
+                displaySignUpForm();
+            });
+
+            $('#ag_login_signup_cancel').click(function (e) {
+                e.preventDefault();
+                //displaySignInForm();
+
+                window.location.href = '@Url.Action("Login", "User")';
+            });
+
+            AGUtil.ready(function () {
+                AGUtil.init();
+            });
+        });
+
+        var login = $('#ag_login');
+
+        var displayForgotForm = function () {
+            login.removeClass('kt-login--signin');
+            login.removeClass('kt-login--signup');
+
+            login.addClass('kt-login--forgot');
+            //login.find('.kt-login--forgot').animateClass('flipInX animated');
+            AGUtil.animateClass(login.find('.kt-login__forgot')[0], 'flipInX animated');
+        }
+
+        var displaySignInForm = function () {
+            login.removeClass('kt-login--forgot');
+            login.removeClass('kt-login--signup');
+
+            login.addClass('kt-login--signin');
+            AGUtil.animateClass(login.find('.kt-login__signin')[0], 'flipInX animated');
+            //login.find('.kt-login__signin').animateClass('flipInX animated');
+        }
+
+        var displaySignUpForm = function () {
+            login.removeClass('kt-login--forgot');
+            login.removeClass('kt-login--signin');
+
+            login.addClass('kt-login--signup');
+            AGUtil.animateClass(login.find('.kt-login__signup')[0], 'flipInX animated');
+        }
+
+        var AGUtil = function () {
+            var resizeHandlers = [];
+
+            var _windowResizeHandler = function () {
+                var _runResizeHandlers = function () {
+                    // reinitialize other subscribed elements
+                    for (var i = 0; i < resizeHandlers.length; i++) {
+                        var each = resizeHandlers[i];
+                        each.call();
+                    }
+                };
+
+                var timeout = false; // holder for timeout id
+                var delay = 250; // delay after event is "complete" to run callback
+
+                window.addEventListener('resize', function () {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(function () {
+                        _runResizeHandlers();
+                    }, delay); // wait 50ms until window resize finishes.
+                });
+            };
+
+            return {
+                init: function (options) {
+                    if (options && options.breakpoints) {
+                        breakpoints = options.breakpoints;
+                    }
+
+                    _windowResizeHandler();
+                },
+
+                ready: function (callback) {
+                    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+                        callback();
+                    } else {
+                        document.addEventListener('DOMContentLoaded', callback);
+                    }
+                },
+
+                hasClass: function (el, className) {
+                    if (!el) {
+                        return;
+                    }
+
+                    return el.classList ? el.classList.contains(className) : new RegExp('\\b' + className + '\\b').test(el.className);
+                },
+
+                addClass: function (el, className) {
+                    if (!el || typeof className === 'undefined') {
+                        return;
+                    }
+
+                    var classNames = className.split(' ');
+
+                    if (el.classList) {
+                        for (var i = 0; i < classNames.length; i++) {
+                            if (classNames[i] && classNames[i].length > 0) {
+                                el.classList.add(AGUtil.trim(classNames[i]));
+                            }
+                        }
+                    } else if (!AGUtil.hasClass(el, className)) {
+                        for (var i = 0; i < classNames.length; i++) {
+                            el.className += ' ' + AGUtil.trim(classNames[i]);
+                        }
+                    }
+                },
+
+                removeClass: function (el, className) {
+                    if (!el || typeof className === 'undefined') {
+                        return;
+                    }
+
+                    var classNames = className.split(' ');
+
+                    if (el.classList) {
+                        for (var i = 0; i < classNames.length; i++) {
+                            el.classList.remove(AGUtil.trim(classNames[i]));
+                        }
+                    } else if (AGUtil.hasClass(el, className)) {
+                        for (var i = 0; i < classNames.length; i++) {
+                            el.className = el.className.replace(new RegExp('\\b' + AGUtil.trim(classNames[i]) + '\\b', 'g'), '');
+                        }
+                    }
+                },
+
+                get: function (query) {
+                    var el;
+
+                    if (query === document) {
+                        return document;
+                    }
+
+                    if (!!(query && query.nodeType === 1)) {
+                        return query;
+                    }
+
+                    if (el = document.getElementById(query)) {
+                        return el;
+                    } else if (el = document.getElementsByTagName(query)) {
+                        return el[0];
+                    } else if (el = document.getElementsByClassName(query)) {
+                        return el[0];
+                    } else {
+                        return null;
+                    }
+                },
+
+                trim: function (string) {
+                    return string.trim();
+                },
+
+                one: function onetime(el, type, callback) {
+                    el = AGUtil.get(el);
+
+                    el.addEventListener(type, function callee(e) {
+                        // remove event
+                        if (e.target && e.target.removeEventListener) {
+                            e.target.removeEventListener(e.type, callee);
+                        }
+
+                        // call handler
+                        return callback(e);
+                    });
+                },
+
+                animateClass: function (el, animationName, callback) {
+                    var animation;
+                    var animations = {
+                        animation: 'animationend',
+                        OAnimation: 'oAnimationEnd',
+                        MozAnimation: 'mozAnimationEnd',
+                        WebkitAnimation: 'webkitAnimationEnd',
+                        msAnimation: 'msAnimationEnd',
+                    };
+
+                    for (var t in animations) {
+                        if (el.style[t] !== undefined) {
+                            animation = animations[t];
+                        }
+                    }
+
+                    AGUtil.addClass(el, 'animated ' + animationName);
+
+                    AGUtil.one(el, animation, function () {
+                        AGUtil.removeClass(el, 'animated ' + animationName);
+                    });
+
+                    if (callback) {
+                        AGUtil.one(el, animation, callback);
+                    }
+                }
+            }
+        }();
+    </script>
+</body>
+</html>

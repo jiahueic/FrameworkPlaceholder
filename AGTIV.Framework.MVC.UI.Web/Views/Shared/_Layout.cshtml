@@ -1,0 +1,246 @@
+﻿@using AGTIV.Framework.MVC.UI.Web.Extension
+@using AGTIV.Framework.MVC.Framework.Constants;
+@using AGTIV.Framework.MVC.Framework.CredentialManager;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>@ViewBag.Title</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="~/Content/font-awesome.min.css" />
+
+    <!-- Syncfusion Essential JS 2 Styles -->
+    <link rel="stylesheet" href="~/Content/ej2/material.css" />
+
+    <!-- Syncfusion Essential JS 2 Scripts -->
+    <script src="~/Scripts/ej2/ej2.min.js"></script>
+</head>
+<body class="skin-blue hold-transition sidebar-mini">
+    <div class="wrapper">
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="/" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>A</b>G</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>AGTIV</b> RFI</span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/admin-lte/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                <span class="hidden-xs">@User.GetUserDetails(ConstantHelper.Claims.FullName)</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="~/admin-lte/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                    <p>
+                                        @User.GetUserDetails(ConstantHelper.Claims.FullName) - Web Consultant
+                                        <small>Member since Jan. 2020</small>
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="@Url.Action("Update", "User", new { id = UserAccessControl.GetCurrentUserId()})" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        @using(Html.BeginForm("Logout", "User", FormMethod.Post, new { id = "logoutForm" }))
+                                        {
+                                            <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-default btn-flat">Log out</a>
+                                        }
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                        @*@if (User.GetUserRole() == ConstantHelper.Role.Admin)
+                            {*@
+                        <li>
+                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        </li>
+                        @*}*@
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="header">MAIN NAVIGATION</li>
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    @ViewBag.Title
+                    @*<small>Control panel</small>*@
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+                    <li class="active">@ViewBag.Title</li>
+                </ol>
+            </section>
+            <!-- Main content -->
+            <section class="content">
+                @RenderBody()
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 1.0.0
+            </div>
+            <strong>Copyright &copy; @DateTime.Now.Year AGTIV Consulting.</strong> All rights reserved.
+        </footer>
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li class="active"><a href="#control-sidebar-options-tab" data-toggle="tab"><i class="fa fa-wrench"></i></a></li>
+                <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+                <li><a href="#control-sidebar-error-tab" data-toggle="tab"><i class="fa fa-exclamation-triangle"></i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Option tab content -->
+                <div class="tab-pane active" id="control-sidebar-options-tab">
+                    <h3 class="control-sidebar-heading">Security Management</h3>
+                    <ul class="control-sidebar-menu">
+                        <li>
+                            <a href="@Url.Action("Index", "Role")">
+                                <i class="menu-icon fa fa-user bg-green-gradient"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Role Maintenance</h4>
+                                    <p>Assign role to user(s)</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "Group")">
+                                <i class="menu-icon fa fa-user bg-green"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Group Maintenance</h4>
+                                    <p>Add users to Group(s)</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "Calendar")">
+                                <i class="menu-icon fa fa-calendar bg-blue"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Calendar Profile</h4>
+                                    <p>Manage different sets of holidays</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.control-sidebar-menu -->
+                </div>
+                <!-- /.tab-pane -->
+                <!-- Settings tab content -->
+                <div class="tab-pane" id="control-sidebar-settings-tab">
+                    <h3 class="control-sidebar-heading">Workflow Management</h3>
+                    <ul class="control-sidebar-menu">
+                        <li>
+                            <a href="@Url.Action("ConfigurationList", "Workflow")">
+                                <i class="menu-icon fa fa-table bg-yellow"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Workflow Configuration</h4>
+                                    <p>Configure workflow stages and email</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("MatrixList", "Workflow")">
+                                <i class="menu-icon fa fa-sitemap bg-orange"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Workflow Matrix</h4>
+                                    <p style="height:30px">Define workflow approval</p><!--Fix height to give consistent spacing between list item-->
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Delegation", "Workflow")">
+                                <i class="menu-icon fa fa-user-plus bg-fuchsia-active"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Delegation</h4>
+                                    <p>Delegate request to representative</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.tab-pane -->
+                <!-- Settings tab content -->
+                <div class="tab-pane" id="control-sidebar-error-tab">
+                    <h3 class="control-sidebar-heading">Error Logs</h3>
+                    <ul class="control-sidebar-menu">
+                        <li>
+                            <a href="@Url.Action("Index", "ElmahLog")">
+                                <i class="menu-icon fa fa-warning bg-red"></i>
+                                <div class="menu-info">
+                                    <h4 class="control-sidebar-subheading">Elmah Log</h4>
+                                    <p>List of error logs for Web and API</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+    </div>
+    <!-- ./wrapper -->
+    <!-- REQUIRED SCRIPTS -->
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryunobtrusiveajax")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/admin-lte/js")
+
+    @RenderSection("scripts", required: false)
+
+
+    <script>
+        function DownloadInspectionReport() {
+            debugger;
+            window.open('@Url.Action("Report", "JKR")', '_blank')
+        }
+    </script>
+
+    <!-- Syncfusion Essential JS 2 ScriptManager -->
+    @Html.EJS().ScriptManager()
+</body>
+</html>

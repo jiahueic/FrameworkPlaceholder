@@ -1,0 +1,50 @@
+﻿@using AGTIV.Framework.MVC.Framework.Helper
+@using AGTIV.Framework.MVC.UI.ViewModel.Calendar
+@model CalendarProfileFormVM
+
+<div class="row">
+    <div class="col-md-6 form-group">
+        <div class="control-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        @Html.EJS().TextBoxFor(model => model.Name).Placeholder(ConversionHelper.GetPropertyDisplayName<CalendarProfileFormVM>(c => c.Name)).CssClass("e-outline").Render()
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+    <div class="col-md-6 form-group">
+        <div class="control-label">
+            @Html.LabelFor(model => model.ParentProfileId)
+        </div>
+        @Html.EJS().ComboBoxFor(model => model.ParentProfileId).Autofill(true).Placeholder("Select parent profile").DataSource((IEnumerable<object>)Model.ParentProfileDdl).Change("parentProfileChange").AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.ComboBoxFieldSettings { Text = "Text", Value = "Value" }).CssClass("e-outline").Render()
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 form-group">
+        <div class="control-label">
+            @Html.Label("Working Days")
+        </div>
+        <div class="form-group">
+            @Html.EJS().CheckBoxFor(model => model.Monday).Label(ConversionHelper.GetPropertyDisplayName<CalendarProfileFormVM>(c => c.Monday)).Render()
+        </div>
+        <div class="form-group">
+            @Html.EJS().CheckBoxFor(model => model.Tuesday).Label(ConversionHelper.GetPropertyDisplayName<CalendarProfileFormVM>(c => c.Tuesday)).Render()
+        </div>
+        <div class="form-group">
+            @Html.EJS().CheckBoxFor(model => model.Wednesday).Label(ConversionHelper.GetPropertyDisplayName<CalendarProfileFormVM>(c => c.Wednesday)).Render()
+        </div>
+        <div class="form-group">
+            @Html.EJS().CheckBoxFor(model => model.Thursday).Label(ConversionHelper.GetPropertyDisplayName<CalendarProfileFormVM>(c => c.Thursday)).Render()
+        </div>
+        <div class="form-group">
+            @Html.EJS().CheckBoxFor(model => model.Friday).Label(ConversionHelper.GetPropertyDisplayName<CalendarProfileFormVM>(c => c.Friday)).Render()
+        </div>
+        <div class="form-group">
+            @Html.EJS().CheckBoxFor(model => model.Saturday).Label(ConversionHelper.GetPropertyDisplayName<CalendarProfileFormVM>(c => c.Saturday)).Render()
+        </div>
+        <div class="form-group">
+            @Html.EJS().CheckBoxFor(model => model.Sunday).Label(ConversionHelper.GetPropertyDisplayName<CalendarProfileFormVM>(c => c.Sunday)).Render()
+        </div>
+    </div>
+    <div class="col-md-6 form-group">
+        @Html.EJS().CheckBoxFor(model => model.IsParentProfile).Label(ConversionHelper.GetPropertyDisplayName<CalendarProfileFormVM>(c => c.IsParentProfile)).Render()
+    </div>
+</div>

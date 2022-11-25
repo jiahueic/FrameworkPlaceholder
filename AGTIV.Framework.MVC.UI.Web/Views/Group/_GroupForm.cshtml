@@ -1,0 +1,31 @@
+﻿@using AGTIV.Framework.MVC.Framework.Helper
+@using AGTIV.Framework.MVC.UI.ViewModel.Group
+@model GroupFormVM
+
+@Html.HiddenFor(model => model.UserDdl)
+
+<div class="row">
+    <div class="col-md-6 form-group">
+        <div class="control-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        @Html.EJS().TextBoxFor(model => model.Name).Placeholder(ConversionHelper.GetPropertyDisplayName<GroupFormVM>(c => c.Name)).CssClass("e-outline").Render()
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+    <div class="col-md-6 form-group">
+        <div class="control-label">
+            @Html.LabelFor(model => model.UserIds)
+        </div>
+        @Html.EJS().MultiSelectFor(model => model.UserIds).Placeholder("Select users").DataSource((IEnumerable<object>)Model.UserDdl).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.MultiSelectFieldSettings { Text = "Text", Value = "Value" }).CssClass("e-outline").Render()
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 form-group">
+        <div class="control-label">
+            @Html.LabelFor(model => model.RoleIds)
+        </div>
+        @Html.EJS().MultiSelectFor(model => model.RoleIds).Placeholder("Select roles").DataSource((IEnumerable<object>)Model.RoleDdl).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.MultiSelectFieldSettings { Text = "Text", Value = "Value" }).CssClass("e-outline").Render()
+    </div>
+</div>
+
+@Html.EJS().ScriptManager()

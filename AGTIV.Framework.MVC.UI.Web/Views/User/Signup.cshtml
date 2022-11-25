@@ -1,0 +1,80 @@
+﻿@using AGTIV.Framework.MVC.UI.Web.Models
+@using Syncfusion.EJ2
+@using Syncfusion.EJ2.Inputs
+
+@model RegisterViewModel
+
+@{
+    ViewBag.Title = "Signup";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+
+    var successMsg = ViewBag.SuccessMsg;
+    var errorMsg = ViewBag.ErrorMsg;
+}
+
+<h3>@ViewBag.Msg</h3>
+<br />
+<div class="kt-login__signup">
+    <div class="ag-login-header">
+        <h3 class="ag-login-title">Sign Up</h3>
+        <div class="ag-login-desc">Enter your details to create your account:</div>
+    </div>
+    @using (Html.BeginForm("Signup", "User", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.EJS().TextBoxFor(m => m.Email).Placeholder("Email").CssClass("e-outline").FloatLabelType(FloatLabelType.Auto).Render()
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        @Html.EJS().TextBoxFor(m => m.Password).Placeholder("Password").CssClass("e-outline ag-password").FloatLabelType(FloatLabelType.Auto).Type(InputType.Password.ToString()).Render()
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+        @Html.EJS().TextBoxFor(m => m.ConfirmPassword).Placeholder("Confirm Password").CssClass("e-outline ag-password").FloatLabelType(FloatLabelType.Auto).Type(InputType.Password.ToString()).Render()
+        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+        @Html.EJS().TextBoxFor(m => m.Name).Placeholder("Name").CssClass("e-outline ag-password").FloatLabelType(FloatLabelType.Auto).Render()
+        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+        @*< div class="row kt-login__extra">
+                <div class="col kt-align-left">
+                    <label class="kt-checkbox">
+                        <input type = "checkbox" name="agree">I Agree the<a href="#" class="kt-link kt-login__link kt-font-bold">terms and conditions</a>.
+                            <span></span>
+                    </label>
+                    <span class="form-text text-muted"></span>
+                </div>
+            </div>*@
+        <div class="ag-login-actions" style="margin-top:10px;">
+            @Html.EJS().Button("ag_login_signup_submit").CssClass("ag-login-button").Content("Request").Render()&nbsp;&nbsp;
+            @Html.EJS().Button("ag_login_signup_cancel").CssClass("ag-login-button-cancel").Content("Cancel").Render()
+        </div>
+
+    }
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        var succMsg = '@Html.Raw(successMsg)';
+        var errMsg = '@Html.Raw(errorMsg)';
+
+        if (succMsg != '') {
+            Swal.fire({
+                width: 500,
+                padding: '3em',
+                icon: 'success',
+                allowOutsideClick: false,
+                title: '<strong>' + succMsg + '</strong>',
+                html: '<h5>Click Ok to proceed to Login</h5>'
+            }).then(
+            function () {
+                window.location.href = '@Url.Action("Login", "User")';
+            });
+        }
+
+        if (errMsg != '') {
+            Swal.fire({
+                width: 500,
+                padding: '3em',
+                icon: 'error',
+                title: '<strong>' + errMsg + '</strong>',
+                html: '<h5>Please try again</h5>'
+            });
+        }
+    </script>
+}

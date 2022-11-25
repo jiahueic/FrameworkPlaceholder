@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{34370C5E-8AF7-4D3F-AED4-6FDB02933413}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AGTIV.Framework.MVC.UI.Process</RootNamespace>
+    <AssemblyName>AGTIV.Framework.MVC.UI.Process</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AuthenticationProcess.cs" />
+    <Compile Include="BaseProcess.cs" />
+    <Compile Include="CalendarProcess.cs" />
+    <Compile Include="Configuration\AutoMapperConfig.cs" />
+    <Compile Include="ElmahLogProcess.cs" />
+    <Compile Include="GroupProcess.cs" />
+    <Compile Include="Interfaces\IAuthenticationProcess.cs" />
+    <Compile Include="Interfaces\IAuthorizationManager.cs" />
+    <Compile Include="Interfaces\ICalendarProcess.cs" />
+    <Compile Include="Interfaces\IElmahLogProcess.cs" />
+    <Compile Include="Interfaces\IGroupProcess.cs" />
+    <Compile Include="Interfaces\IStudentProcess.cs" />
+    <Compile Include="Interfaces\IRoleProcess.cs" />
+    <Compile Include="Interfaces\IUserProcess.cs" />
+    <Compile Include="Interfaces\IWorkflowProcess.cs" />
+    <Compile Include="Manager\IBearerTokenManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoleProcess.cs" />
+    <Compile Include="StudentProcess.cs" />
+    <Compile Include="UserProcess.cs" />
+    <Compile Include="WorkflowProcess.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AGTIV.Framework.MVC.DTO\AGTIV.Framework.MVC.DTO.csproj">
+      <Project>{343AB4D8-6BBC-476A-BF59-2D66504BA83F}</Project>
+      <Name>AGTIV.Framework.MVC.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AGTIV.Framework.MVC.Entities\AGTIV.Framework.MVC.Entities.csproj">
+      <Project>{3F0327AD-D8B5-4BDA-B58C-93E5D18C5A22}</Project>
+      <Name>AGTIV.Framework.MVC.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AGTIV.Framework.MVC.Framework\AGTIV.Framework.MVC.Framework.csproj">
+      <Project>{F0FD7668-099D-49AF-8DE1-9029DF935FAD}</Project>
+      <Name>AGTIV.Framework.MVC.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AGTIV.Framework.MVC.UI.ViewModel\AGTIV.Framework.MVC.UI.ViewModel.csproj">
+      <Project>{6EEDFCAE-E53D-4094-A444-41F33475C3DF}</Project>
+      <Name>AGTIV.Framework.MVC.UI.ViewModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

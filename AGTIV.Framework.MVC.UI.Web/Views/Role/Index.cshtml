@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewBag.Title = "User Management";
+}
+
+@using AGTIV.Framework.MVC.Framework.Helper
+@using AGTIV.Framework.MVC.UI.ViewModel.User
+
+
+<div>
+    @{
+        List<object> toolbarItems = new List<object>();
+        toolbarItems.Add(new { text = "Users" });
+        toolbarItems.Add("Add");
+        toolbarItems.Add("Search");
+
+        List<object> commands = new List<object>();
+        commands.Add(new { type = "Update", buttonOption = new { iconCss = "e-icons e-edit" }, cssClass = "e-flat" });
+        commands.Add(new { type = "Delete", buttonOption = new { iconCss = "e-icons e-delete" }, cssClass = "e-flat" });
+    }
+
+    @Html.EJS().Grid("usersGrid").DataSource(dataManager => { dataManager.Url(Url.Action("_GetUserList")).RemoveUrl(Url.Action("_DeleteUser", "User")).Adaptor("UrlAdaptor"); }).ActionComplete("actionComplete").Columns(col => {
+    col.Field(ConversionHelper.GetPropertyDisplayName<User>(c => c.FullName, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<User>(c => c.FullName)).TextAlign(Syncfusion.EJ2.Grids.TextAlign.Center).Add();
+    col.Field(ConversionHelper.GetPropertyDisplayName<User>(c => c.EmailAddress, getPropertyName: true)).AllowSearching(false).HeaderText(ConversionHelper.GetPropertyDisplayName<User>(c => c.EmailAddress)).TextAlign(Syncfusion.EJ2.Grids.TextAlign.Center).Add();
+    col.Field(ConversionHelper.GetPropertyDisplayName<User>(c => c.MobileNo, getPropertyName: true)).AllowSearching(false).HeaderText(ConversionHelper.GetPropertyDisplayName<User>(c => c.MobileNo)).TextAlign(Syncfusion.EJ2.Grids.TextAlign.Center).Add();
+    col.Field(ConversionHelper.GetPropertyDisplayName<User>(c => c.RolesString, getPropertyName: true)).AllowSearching(false).HeaderText("Roles").TextAlign(Syncfusion.EJ2.Grids.TextAlign.Center).Add();
+    col.Field(ConversionHelper.GetPropertyDisplayName<User>(c => c.AppUser_Id, getPropertyName: true)).AllowSearching(false).HeaderText("Action").Commands(commands).TextAlign(Syncfusion.EJ2.Grids.TextAlign.Center).Add();
+    col.Field(ConversionHelper.GetPropertyDisplayName<User>(c => c.Id, getPropertyName: true)).IsPrimaryKey(true).Visible(false).Add();
+}).AllowPaging().PageSettings(page => page.PageCount(5).PageSize(5).PageSizes(true)).Toolbar(toolbarItems).SelectionSettings(selectionSettings => selectionSettings.CheckboxOnly(true)).CommandClick("commandClick").EditSettings(edit => edit.AllowAdding(true).AllowDeleting(true).ShowDeleteConfirmDialog(true)).Render()
+</div>
+
+
+@{
+    Func<object, object> dialogBody = @<div id="dialogTemp">
+</div>;
+}
+
+@Html.EJS().Dialog("roleAssignmentDialog").AllowDragging(true).Close("cancelBtnClick").MinHeight("220px").Header("Role Assignment").ContentTemplate(dialogBody).ShowCloseIcon(true).CloseOnEscape(true).Visible(false).Width("500px").Position(position => position.X("center").Y("center")).Render()
+
+<script>
+    var commandClick = function (args) {
+        if (args.commandColumn.type === 'Update') {
+             window.location.href = "@Url.Action("Update", "User")/" + args.rowData.Id;
+        }
+    }
+
+    var cancelBtnClick = function (args) {
+        var dialogObj = document.getElementById('roleAssignmentDialog').ej2_instances[0];
+        dialogObj.hide();
+        $('#dialogTemp').html("");
+    }
+
+    var actionComplete = function (args) {
+            if (args.requestType === 'add') {
+                window.location.href = "@Url.Action("Create", "User")";
+            }
+        }
+</script>
+@Html.EJS().ScriptManager()
+
+
+<style>
+    /* DashboardLayout element styles  */
+    #dashboard_layout .e-panel .e-panel-container .content {
+        vertical-align: middle;
+        font-weight: 500;
+        font-size: 20px;
+        text-align: center;
+        line-height: 45px;
+    }
+
+    /*#rolesGrid {
+        margin: auto 15px;
+    }
+
+    #usersGrid {
+        margin: auto 15px;
+    }*/
+
+    .row {
+        margin: 10px 0px;
+    }
+</style>

@@ -1,0 +1,31 @@
+﻿@using AGTIV.Framework.MVC.UI.ViewModel.Calendar
+@model HolidayVM
+
+@{
+    ViewBag.Title = "Calendar Holiday - Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using(Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="control-section" style="margin: auto 20px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Create - Calendar Holiday</h3>
+                    </div>
+                    <div class="box-body">
+                        @Html.Partial("_HolidayForm", Model)
+                    </div>
+                    <div class="box-footer text-right">
+                        @Html.EJS().Button("Create").Type("submit").Content("Save").CssClass("e-primary").Render()
+                        <a href="@Url.Action("Edit", new { id = Model.ProfileId })" class="e-btn">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

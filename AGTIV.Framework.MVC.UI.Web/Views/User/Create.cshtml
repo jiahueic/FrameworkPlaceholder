@@ -1,0 +1,93 @@
+﻿@using AGTIV.Framework.MVC.UI.ViewModel.User
+
+@model CreateUserVM
+
+@{
+    ViewBag.Title = "Create User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var errorMsg = ViewBag.ErrorMsg;
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Admin - Create New User</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.User.FullName)
+                                </div>
+                                @Html.EJS().TextBoxFor(model => model.User.FullName).CssClass("e-outline").Placeholder("Full Name").Render()
+                                @Html.ValidationMessageFor(model => model.User.FullName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.User.EmailAddress)
+                                </div>
+                                @Html.EJS().TextBoxFor(model => model.User.EmailAddress).CssClass("e-outline").Placeholder("Email Address").Render()
+                                @Html.ValidationMessageFor(model => model.User.EmailAddress, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.User.MobileNo)
+                                </div>
+                                @Html.EJS().TextBoxFor(model => model.User.MobileNo).CssClass("e-outline").Placeholder("Mobile No").Render()
+                                @Html.ValidationMessageFor(model => model.User.MobileNo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.User.Roles)
+                                </div>
+                                @Html.EJS().MultiSelectFor(model => model.User.Roles).Placeholder("Select roles").DataSource(Model.RoleDDL).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.MultiSelectFieldSettings { Text = "Name", Value = "Name" }).CssClass("e-outline").Render()
+                                @Html.ValidationMessageFor(model => model.User.Roles, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer" style="text-align:right;">
+                    @Html.EJS().Button("Create").Type("submit").Content("Create").CssClass("e-primary").Render()
+                    @*<button type="submit" class="btn btn-primary">Create</button>*@
+                    <a href="@Url.Action("Index", "Role")" class="e-btn">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@Html.EJS().ScriptManager()
+
+@section scripts {
+    <script type="text/javascript">
+        var message = '@Html.Raw(errorMsg)';
+
+        if (message != '') {
+            Swal.fire({
+                width: 500,
+                padding: '3em',
+                icon: 'error',
+                title: '<strong>' + message + '</strong>',
+                html: '<h4>Please try again</h4>'
+            });
+        }
+    </script>
+}

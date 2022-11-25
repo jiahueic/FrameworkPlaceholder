@@ -1,0 +1,47 @@
+﻿@using AGTIV.Framework.MVC.UI.ViewModel.User
+
+@model UpdateUserVM
+
+@{
+    ViewBag.Title = "User Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Update", "User", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">My Personal Details</h3>
+                </div>
+                <div class="box-body">
+                    <div class="text-right">
+                        <a href="@Url.Action("ChangePassword", new { appUserId = Model.User.AppUser_Id, userProfileId = Model.User.Id })" class="btn btn-default btn-flat">Change Password</a>
+                    </div>
+                    @Html.Partial("_UserProfile")
+                </div>
+                <div class="box-footer" style="text-align:right;">
+                    <button type="submit" class="btn btn-primary">Update Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script>
+        $(function(){
+            var _getValue = '@(Model.User.Image == null ? "isNull" : "notNull")';
+
+            if (_getValue === 'notNull') {
+                var extension = '@(Model.User.Image?.ContentType)';
+                var base64string = '@(Model.User.Image != null ? Convert.ToBase64String(Model.User.Image.FileBytes) : "")';
+                var imageUrl = "data:" + extension + ";base64," + base64string;
+                $("#profilePic").attr('src', imageUrl);
+            }
+        })
+    </script>
+    }

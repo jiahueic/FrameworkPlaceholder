@@ -1,0 +1,103 @@
+﻿@using Syncfusion.EJ2.Popups
+@model int
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Func<object, object> dialogBody = @<div id="dialogTemp"></div>;
+}
+
+@Html.Partial("_WorkflowHistory", Model)
+@Html.Partial("_WorkflowLog", Model)
+@Html.EJS().Dialog("reassignTaskDialog").Visible(false).AnimationSettings(new DialogAnimationSettings() { Effect = DialogEffect.Fade }).Header("Reassign Task").ContentTemplate(dialogBody).IsModal(true).OverlayClick("hideModal").ShowCloseIcon(true).CloseOnEscape(true).Width("800px").Render()
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#btnTerminateWorkflow").click(function (e) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("TerminateWorkflow")",
+                    data: { processId: @Model },
+                    success: function (result) {
+                        if (result) {
+                            refreshGrid();
+                            $("#btnTerminateWorkflow").hide();
+
+                            var grid = document.getElementById("WorkflowHistoryGrid").ej2_instances[0]
+                            grid.showHider.hide("Commands", 'headerText');
+                        }
+                    },
+                    error: function (result) {
+                        alert('Fail to terminate workflow');
+                    }
+                });
+            });
+        })
+
+        function onQueryCell(args) {
+            // Show reassign button only when task is not completed.
+            if (args.cell.classList.contains('e-unboundcell') && args.data.ActionedDate != null) {
+                args.cell.querySelector('button').classList.add('e-hide');
+            }
+        }
+
+        function reassignTask(args) {
+            var container = document.getElementById("workflowHistoryCard");
+            var dialog = document.getElementById("reassignTaskDialog").ej2_instances[0];
+            let spinner = ej.popups.createSpinner({ target: container });
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("_ReassignTask")",
+                data: { taskId: args.rowData.TaskId },
+                beforeSend: function (result) {
+                    ej.popups.showSpinner(container);
+                },
+                complete: function(result) {
+                    ej.popups.hideSpinner(container);
+                },
+                success: function (result) {
+                    $('#dialogTemp').html(result);
+
+                    // Apply client-side form validation
+                    $('#reassignTaskForm').removeData('validator');
+                    $('#reassignTaskForm').removeData('unobtrusiveValidation');
+                    $.validator.unobtrusive.parse('#reassignTaskForm');
+
+                    dialog.show();
+                },
+                error: function (result) {
+                    alert('Fail to initialize modal dialog for reassign task.');
+                }
+            });
+        }
+
+        var cancelBtnClick = function (args) {
+            hideModal();
+        }
+
+        function hideModal() {
+            var dialog = document.getElementById("reassignTaskDialog").ej2_instances[0];
+            dialog.hide();
+            $('#dialogTemp').html("");
+        }
+
+        function refreshGrid() {
+            var grid1 = document.getElementById("WorkflowHistoryGrid").ej2_instances[0]
+            grid1.refresh();
+            var grid2 = document.getElementById("WorkflowLogGrid").ej2_instances[0]
+            grid2.refresh();
+        }
+
+        function loadFailed(args) {
+            var newDoc = document.open("text/html", "replace");
+            newDoc.write(args.error.error.responseText);
+            newDoc.close();
+        }
+    </script>
+}
+
+
+

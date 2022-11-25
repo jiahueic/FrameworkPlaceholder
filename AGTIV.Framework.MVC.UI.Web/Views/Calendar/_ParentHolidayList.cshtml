@@ -1,0 +1,35 @@
+﻿@using AGTIV.Framework.MVC.Framework.Helper
+@using AGTIV.Framework.MVC.UI.ViewModel.Calendar
+
+@model Guid
+
+@{ 
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add("Search");
+}
+
+<div class="row">
+    <div class="col-md-12 card-container">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Parent Holiday List</h3>
+            </div>
+            <div class="box-body">
+                @Html.EJS().Grid("ParentHolidayGrid").DataSource(dataManager => { dataManager.Url(Url.Action("HolidayTable", new { id = Model })).Adaptor("UrlAdaptor"); }).AllowSorting().AllowMultiSorting().GridLines(Syncfusion.EJ2.Grids.GridLine.Both).Columns(col =>
+                {
+                    col.Field(ConversionHelper.GetPropertyDisplayName<HolidayVM>(g => g.Name, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<HolidayVM>(g => g.Name)).Width("150px").Add();
+                    col.Field(ConversionHelper.GetPropertyDisplayName<HolidayVM>(g => g.StartDate, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<HolidayVM>(g => g.StartDate)).Format("dd/MM/yyyy").Width("150px").Add();
+                    col.Field(ConversionHelper.GetPropertyDisplayName<HolidayVM>(g => g.EndDate, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<HolidayVM>(g => g.EndDate)).Format("dd/MM/yyyy").Width("150px").Add();
+                    col.Field(ConversionHelper.GetPropertyDisplayName<HolidayVM>(g => g.Year, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<HolidayVM>(g => g.Year)).Width("80px").Add();
+                    col.Field(ConversionHelper.GetPropertyDisplayName<HolidayVM>(g => g.Days, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<HolidayVM>(g => g.Days)).Width("80px").Add();
+                }).Toolbar(toolbarItems).ContextMenuItems(new List<object>() {
+                    "AutoFit", "AutoFitAll", "SortAscending", "SortDescending", "Copy", "FirstPage", "PrevPage", "LastPage", "NextPage"
+                }).AllowPaging().PageSettings(page => { page.PageSizes(true); }).SearchSettings(search => {
+                    search.Fields(new string[] {
+                        ConversionHelper.GetPropertyDisplayName<HolidayVM>(g => g.Name, getPropertyName: true)
+                    });
+                }).RowHeight(40).Render()
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@using AGTIV.Framework.MVC.Framework.Helper
+@using AGTIV.Framework.MVC.UI.ViewModel.Calendar
+@model HolidayVM
+
+@Html.HiddenFor(model => model.Id)
+@Html.HiddenFor(model => model.ProfileId)
+<div class="row">
+    <div class="col-md-6 form-group">
+        <div class="control-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        @Html.EJS().TextBoxFor(model => model.Name).Placeholder(ConversionHelper.GetPropertyDisplayName<HolidayVM>(c => c.Name)).CssClass("e-outline").Render()
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+    <div class="col-md-6 form-group">
+        <div class="control-label">
+            @Html.LabelFor(model => model.Year)
+        </div>
+        @Html.EJS().NumericTextBoxFor(model => model.Year).Decimals(0).Format("####").ValidateDecimalOnType(true).Placeholder(ConversionHelper.GetPropertyDisplayName<HolidayVM>(c => c.Year)).Min(0).CssClass("e-outline").Render()
+        @Html.ValidationMessageFor(model => model.Year)
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 form-group">
+        <div class="control-label">
+            @Html.LabelFor(model => model.StartDate)
+        </div>
+        @Html.EJS().DatePickerFor(model => model.StartDate).Placeholder(ConversionHelper.GetPropertyDisplayName<HolidayVM>(c => c.StartDate)).CssClass("e-outline").Render()
+        @Html.ValidationMessageFor(model => model.StartDate)
+    </div>
+    <div class="col-md-6 form-group">
+        <div class="control-label">
+            @Html.LabelFor(model => model.EndDate)
+        </div>
+        @Html.EJS().DatePickerFor(model => model.EndDate).Placeholder(ConversionHelper.GetPropertyDisplayName<HolidayVM>(c => c.EndDate)).CssClass("e-outline").Render()
+        @Html.ValidationMessageFor(model => model.StartDate)
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 form-group">
+        <div class="control-label">
+            @Html.LabelFor(model => model.Days)
+        </div>
+        @Html.EJS().NumericTextBoxFor(model => model.Days).Decimals(0).Format("n0").ValidateDecimalOnType(true).Placeholder(ConversionHelper.GetPropertyDisplayName<HolidayVM>(c => c.Year)).Min(0).CssClass("e-outline").Render()
+        @Html.ValidationMessageFor(model => model.Days)
+    </div>
+</div>
+

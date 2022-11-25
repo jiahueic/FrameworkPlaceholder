@@ -1,0 +1,49 @@
+﻿@using AGTIV.Framework.MVC.Framework.Helper
+@using AGTIV.Framework.MVC.UI.ViewModel.Workflow
+
+@{
+    ViewBag.Title = "Delegation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<object> commands = new List<object>();
+    commands.Add(new { type = "Delete", buttonOption = new { iconCss = "e-icons e-delete", cssClass = "e-flat" } });
+
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add("Search");
+    toolbarItems.Add(new { text = "Add", tooltipText = "Add a new record", id = "Add", prefixIcon = "e-add" });
+}
+
+<div class="box box-info">
+    <div class="box-header with-border">
+        <h3 class="box-title">Delegate workflow tasks to another user</h3>
+    </div>
+    <div class="box-body">
+        @Html.EJS().Grid("DelegationGrid").DataSource(dataManager => { dataManager.Url(Url.Action("_DelegationList")).RemoveUrl(Url.Action("DeleteDelegation")).Adaptor("UrlAdaptor"); }).AllowSorting().AllowMultiSorting().GridLines(Syncfusion.EJ2.Grids.GridLine.Both).ToolbarClick("toolbarClick").Columns(col =>
+        {
+            col.Field(ConversionHelper.GetPropertyDisplayName<DelegationVM>(g => g.DelegationID, getPropertyName: true)).IsPrimaryKey(true).Visible(false).Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<DelegationVM>(g => g.DelegationFrom, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<DelegationVM>(g => g.DelegationFrom)).Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<DelegationVM>(g => g.DelegationTo, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<DelegationVM>(g => g.DelegationTo)).Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<DelegationVM>(g => g.StartDate, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<DelegationVM>(g => g.StartDate)).Format("dd/MM/yyyy").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<DelegationVM>(g => g.EndDate, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<DelegationVM>(g => g.EndDate)).Format("dd/MM/yyyy").Add();
+            col.HeaderText("Actions").Commands(commands).Add();
+        }).EditSettings(edit => { edit.AllowDeleting(true).ShowDeleteConfirmDialog(true); }).Toolbar(toolbarItems).ContextMenuItems(new List<object>() {
+            "AutoFit", "AutoFitAll", "SortAscending", "SortDescending", "Copy", "Delete", "FirstPage", "PrevPage", "LastPage", "NextPage"
+        }).AllowPaging().PageSettings(page => { page.PageSizes(true); }).SearchSettings(search =>
+        {
+            search.Fields(new string[] {
+                ConversionHelper.GetPropertyDisplayName<DelegationVM>(g => g.DelegationFrom, getPropertyName: true),
+                ConversionHelper.GetPropertyDisplayName<DelegationVM>(g => g.DelegationTo, getPropertyName: true)
+            });
+        }).RowHeight(40).Render()
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function toolbarClick(args) {
+            if (args.item.id === 'Add') {
+                window.location.href = "@Url.Action("CreateDelegation")";
+            }
+        }
+    </script>
+}

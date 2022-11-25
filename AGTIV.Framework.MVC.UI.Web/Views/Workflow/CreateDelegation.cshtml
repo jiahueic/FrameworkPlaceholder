@@ -1,0 +1,59 @@
+﻿@using AGTIV.Framework.MVC.Framework.CredentialManager
+@using AGTIV.Framework.MVC.Framework.Constants
+@model AGTIV.Framework.MVC.UI.ViewModel.Workflow.CreateDelegationVM
+
+@{
+    ViewBag.Title = "Delegation - Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool isAdmin = UserAccessControl.MatchAnyRoles(ConstantHelper.Role.Admin);
+}
+
+@using(Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="control-section" style="margin: auto 20px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Create - Delegation</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.DelegateFromId)
+                                </div>
+                                @Html.EJS().ComboBoxFor(model => model.DelegateFromId).Autofill(true).Placeholder("Select a User").DataSource((IEnumerable<object>)Model.UserDdl).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.ComboBoxFieldSettings { Value = "Id", Text = "FullName" }).Enabled(isAdmin).CssClass("e-outline").Render()
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.DelegateToId)
+                                </div>
+                                @Html.EJS().ComboBoxFor(model => model.DelegateToId).Autofill(true).Placeholder("Select a User").DataSource((IEnumerable<object>)Model.UserDdl).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.ComboBoxFieldSettings { Value = "Id", Text = "FullName" }).CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.StartDate)
+                                </div>
+                                @Html.EJS().DatePickerFor(model => model.StartDate).CssClass("e-outline").Render()
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.EndDate)
+                                </div>
+                                @Html.EJS().DatePickerFor(model => model.EndDate).CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer text-right">
+                        <button class='e-btn e-primary'>Create</button>
+                        <a href="@Url.Action("Index")" class="e-btn">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,55 @@
+﻿@using AGTIV.Framework.MVC.UI.Web.Models
+@using Syncfusion.EJ2
+@using Syncfusion.EJ2.Inputs
+
+@model LoginViewModel
+
+@{
+    ViewBag.Title = "AGTIV - Custom MVC";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+
+    var errorMsg = ViewBag.ErrorMsg;
+}
+
+<div class="ag-login-header">
+    <h3 class="ag-login-title">AGTIV - Custom MVC</h3>
+</div>
+@using (Html.BeginForm("Login", "User", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.EJS().TextBoxFor(m => m.Email).Placeholder("Email").CssClass("e-outline").FloatLabelType(FloatLabelType.Auto).Render()
+    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+    @Html.EJS().TextBoxFor(m => m.Password).Placeholder("Password").CssClass("e-outline ag-password").FloatLabelType(FloatLabelType.Auto).Type(InputType.Password.ToString()).Render()
+    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+    <div class="ag-login-extra">
+        @*<div class="col">
+                <label class="login-checkbox">
+                    <input type="checkbox" name="remember"> Remember me
+                    <span></span>
+                </label>
+            </div>*@
+        <div class="col" style="text-align:right;">
+            @Html.ActionLink("Forgot Password?", "ForgotPassword", "User", null, new { @class = "ag-login-forgot-link" })
+        </div>
+    </div>
+    <div class="ag-login-actions">
+        @Html.EJS().Button("ag_login_signin").CssClass("ag-login-button").Content("Sign In").Render()
+    </div>
+}
+
+@section scripts {
+    <script type="text/javascript">
+        var message = '@Html.Raw(errorMsg)';
+
+        if (message != '') {
+            Swal.fire({
+                width: 500,
+                padding: '3em',
+                icon: 'error',
+                title: '<strong>' + message + '</strong>',
+                html: '<h5>Please try again</h5>'
+            });
+        }
+    </script>
+}

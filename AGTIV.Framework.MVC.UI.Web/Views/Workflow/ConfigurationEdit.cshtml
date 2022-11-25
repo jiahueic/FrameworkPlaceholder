@@ -1,0 +1,96 @@
+﻿@using AGTIV.Framework.MVC.Framework.Helper;
+
+@model AGTIV.Framework.MVC.UI.ViewModel.Workflow.WorkflowConfigurationVM
+
+@{
+    ViewBag.Title = "Workflow Configuration - Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.InternalStepName)
+    @Html.HiddenFor(model => model.StepId)
+    @Html.HiddenFor(model => model.ActionId)
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Edit - @Model.StepName</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.StepName)
+                                </div>
+                                @Html.EJS().TextBoxFor(model => model.StepName).Placeholder("Matrix Name").CssClass("e-outline").Render()
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.IsSingleApprover)
+                                </div>
+                                @Html.EJS().CheckBoxFor(model => model.IsSingleApprover).Disabled(Model.ActionId == 0).CssClass("e-outline").Render()
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.EmailSubject)
+                                </div>
+                                @Html.EJS().TextBoxFor(model => model.EmailSubject).Placeholder("Email Subject").Readonly(Model.InternalStepName.Equals("Start")).Value(Model.EmailSubject).CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.EmailBody)
+                                </div>
+                                @Html.EJS().RichTextEditorFor(model => model.EmailBody).Placeholder("Email Body").Readonly(Model.InternalStepName.Equals("Start")).CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.TaskUrl)
+                                </div>
+                                @Html.EJS().TextBoxFor(model => model.TaskUrl).Placeholder("Task URL").Readonly(Model.InternalStepName.MatchAny("Start", "Approved")).CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.DueDateDay)
+                                </div>
+                                @Html.EJS().NumericTextBoxFor(model => model.DueDateDay).Decimals(0).Format("n0").ValidateDecimalOnType(true).Placeholder("Due Date").Readonly(Model.InternalStepName.MatchAny("Start", "Approved", "Rejected")).Min(0).Step(1).CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer" style="text-align:right;">
+                    @Html.EJS().Button("btnSave").Type("submit").Content("Save").CssClass("e-primary").Render()
+                    &nbsp;
+                    @Html.EJS().Button("btnBack").Type("button").Content("Back").Click("redirectTo").Render()
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    function redirectTo() {
+        location.href = '@Url.Action("ConfigurationList", "Workflow")';
+    }
+</script>

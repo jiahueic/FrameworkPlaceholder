@@ -1,0 +1,39 @@
+﻿@using AGTIV.Framework.MVC.Framework.Helper
+@using AGTIV.Framework.MVC.Framework.CredentialManager
+@using AGTIV.Framework.MVC.Framework.Constants
+@using AGTIV.Framework.MVC.UI.ViewModel.Workflow
+@model int
+
+@{
+    List<object> commands = new List<object>();
+    commands.Add(new { type = "reassignTask", buttonOption = new { content = "Reassign", cssClass = "e-flat" } });
+    bool workflowIncomplete = ViewBag.IsIncomplete ?? false;
+    bool isAdmin = UserAccessControl.MatchAnyRoles(ConstantHelper.Role.Admin);
+}
+
+<div class="box box-info" id="workflowHistoryCard">
+    <div class="box-body">
+        @Html.EJS().Grid("WorkflowHistoryGrid").DataSource(dataManager => {
+           dataManager.Url(Url.Action("_WorkflowHistory", new { processId = Model })).Adaptor("UrlAdaptor");
+        }).GridLines(Syncfusion.EJ2.Grids.GridLine.Both).Width("auto").Columns(col =>
+        {
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.StepName, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.StepName)).Width("130").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.AssigneeName, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.AssigneeName)).Width("150").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.AssignedDate, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.AssignedDate)).Format("dd/MM/yyyy").Width("130").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.DueDate, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.DueDate)).Format("dd/MM/yyyy").Width("130").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.Status, getPropertyName: true)).Width("130").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.ActionedDate, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.ActionedDate)).Format("dd/MM/yyyy").Width("130").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.ActionedByName, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.ActionedByName)).Width("130").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.ActionName, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.ActionName)).Width("130").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.Comments, getPropertyName: true)).Width("200").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowHistoryVM>(m => m.TaskId, getPropertyName: true)).Visible(false).Add();
+            col.HeaderText("Commands").Commands(commands).TextAlign(Syncfusion.EJ2.Grids.TextAlign.Center).Width("130").Visible(isAdmin && workflowIncomplete).Add();
+        }).CommandClick("reassignTask").ContextMenuItems(new List<object>() { "AutoFit", "AutoFitAll",  "Copy" }).AllowTextWrap().QueryCellInfo("onQueryCell").RowHeight(50).ActionFailure("loadFailed").Render()
+    </div>
+    <div class="e-card-actions">
+        @if(workflowIncomplete && isAdmin)
+        {
+            @Html.EJS().Button("btnTerminateWorkflow").Content("Terminate").CssClass("e-danger").Render()
+        }
+    </div>
+</div>

@@ -1,0 +1,52 @@
+﻿@model AGTIV.Framework.MVC.UI.ViewModel.Workflow.ReassignTaskVM
+
+@{IDictionary<string, object> submit = new Dictionary<string, object>();
+    submit.Add("type", "submit");
+}
+
+@using(Ajax.BeginForm("_ReassignTask", "Workflow", new AjaxOptions
+{
+    HttpMethod = "POST",
+    OnSuccess = "reassignTaskSuccess(data)"
+},
+new
+{
+    @id = "reassignTaskForm"
+}))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.TaskId)
+    <div class="row">
+        <div class="col-md-12 form-group">
+            <div class="control-label">
+                @Html.LabelFor(model => model.AssigneeId)
+            </div>
+            @Html.EJS().ComboBoxFor(model => model.AssigneeId).Autofill(true).Placeholder("Select a User").DataSource((IEnumerable<object>)Model.UserDdl).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.ComboBoxFieldSettings { Value = "Id", Text = "FullName" }).CssClass("e-outline").Render()
+            @Html.ValidationMessageFor(model => model.AssigneeId)
+        </div>
+        <div class="col-md-12">
+            <label id="lblMessage"></label>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-12 text-right">
+            @Html.EJS().Button("btnReassign").Content("Reassign").HtmlAttributes(submit).Render()
+            @Html.EJS().Button("btnCancel").Type("button").Content("Cancel").Click("cancelBtnClick").Render()
+        </div>
+    </div>
+}
+
+<script>
+    function reassignTaskSuccess(data) {
+        var dialog = document.getElementById("reassignTaskDialog").ej2_instances[0];
+        if (data.success) {
+            dialog.hide();
+            refreshGrid();
+        }
+        else {
+            $('#lblMessage').text(data.message)
+        }
+    }
+</script>
+
+@Html.EJS().ScriptManager()

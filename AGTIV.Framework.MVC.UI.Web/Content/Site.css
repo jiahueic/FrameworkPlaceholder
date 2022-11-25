@@ -1,0 +1,124 @@
+﻿body {
+    /*padding-top: 50px;
+    padding-bottom: 20px;*/
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    /*padding-left: 15px;
+    padding-right: 15px;*/
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    /*white-space: normal;*/
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    /*max-width: 100%;*/
+}
+
+.card {
+    margin-bottom: 16px;
+}
+
+/* Grid */
+/* Primary colour for grid header and border */
+.e-grid .e-headercell,
+.e-grid .e-gridheader {
+    border-color: #7f69f0 !important;
+    background-color: #7f69f0 !important;
+    color: #ffffff;
+}
+
+.e-grid,
+.e-grid .e-hscroll:not(.e-scroll-device),
+.e-grid .e-hscroll-bar,
+.e-grid .e-hscroll .e-scroll-nav.e-scroll-right-nav,
+.e-grid .e-hscroll .e-scroll-nav.e-scroll-left-nav {
+    border-top-style: solid !important;
+    border-color: #7f69f0 !important;
+}
+
+/* Light gray shading for alternative rows, toolbar and pager */
+.e-grid .e-toolbar,
+.e-toolbar .e-tbar-btn,
+.e-toolbar .e-toolbar-items,
+.e-grid .e-altrow,
+.e-grid .e-pager,
+.e-grid .e-pagercontainer,
+.e-pager .e-numericitem {
+    background-color: #ecf0f1 !important;
+}
+
+/* Accent colour for active buttons and icons */
+.e-pager .e-currentitem,
+.e-grid .e-sortnumber {
+    background-color: #e3165b !important;
+}
+
+.e-pager .e-numericitem:not(.e-currentitem) {
+    color: #e3165b !important;
+}
+
+.e-grid .e-icons {
+    color: #e3165b !important;
+}
+
+/* Accent font colour */
+.e-grid .e-sortnumber,
+.e-grid .e-headercell .e-icons {
+    color: #ffffff !important;
+}
+
+/* Row hover cover */
+.e-hover,
+.e-toolbar .e-tbar-btn:hover,
+.e-grid td.e-active,
+.e-grid.e-gridhover tr[role='row']:not(.e-editedrow):hover .e-rowcell:not(.e-updatedtd):not(.e-indentcell) {
+    background-color: #bdc3c7 !important;
+}
+
+/* Pager and toolbar buttons effects */
+.e-pager .e-firstpage,
+.e-pager .e-prevpage,
+.e-pager .e-firstpagedisabled,
+.e-pager .e-prevpagedisabled,
+.e-pager .e-nextpage,
+.e-pager .e-lastpage,
+.e-pager .e-nextpagedisabled,
+.e-pager .e-lastpagedisabled,
+.e-pager .e-numericitem:not(.e-active):not(.e-np):not(.e-pp):hover {
+    background-color: transparent !important;
+}
+
+.e-pager .e-numericitem:not(.e-active):not(.e-np):not(.e-pp):hover,
+.e-pager .e-firstpage:not(.e-active):not(.e-np):not(.e-pp):hover,
+.e-pager .e-prevpage:not(.e-active):not(.e-np):not(.e-pp):hover,
+.e-pager .e-nextpage:not(.e-active):not(.e-np):not(.e-pp):hover,
+.e-pager .e-lastpage:not(.e-active):not(.e-np):not(.e-pp):hover {
+    background: transparent !important;
+    border-color: transparent !important;
+    border-radius: 0 !important;
+    color: rgba(0, 0, 0, 0.87) !important;
+}
+/* Grid - End */
+
+/* Card */
+.e-card-actions {
+    padding-left: 12px !important;
+    padding-bottom: 12px !important;
+}
+
+.e-card-header {
+    background: #8bedfc;
+}
+
+.e-card-header-title{
+    font-weight: bold !important;
+}

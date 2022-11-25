@@ -1,0 +1,93 @@
+﻿@using AGTIV.Framework.MVC.Framework.Helper;
+@using AGTIV.Framework.MVC.UI.ViewModel.Workflow;
+@using Syncfusion.EJ2.Grids;
+
+@model IEnumerable<WorkflowConfigurationVM>
+
+@{
+    ViewBag.Title = "Workflow Matrix";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var matrixList = Model.ToList();
+    List<object> commands = new List<object>();
+    commands.Add(new { type = "Edit", buttonOption = new { iconCss = "e-icons e-edit", cssClass = "e-flat" } });
+    commands.Add(new { type = "Delete", buttonOption = new { iconCss = "e-icons e-delete", cssClass = "e-flat" } });
+
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add("Search");
+    toolbarItems.Add(new { text = "Add", tooltipText = "Add a new record", id = "Add", prefixIcon = "e-add" });
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Configure Workflow Matrices</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <div class="box-body">
+                @(
+                            Html.EJS().Grid("workflowMatrixGrid")
+                            .DataSource(ds => { ds.Url(Url.Action("_MatrixList")).RemoveUrl(Url.Action("DeleteMatrix")).Adaptor("UrlAdaptor"); })
+                            .Columns(col =>
+                            {
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowMatrixGridVM>(g => g.Id, getPropertyName: true)).IsPrimaryKey(true).Visible(false).Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowMatrixGridVM>(g => g.MatrixName, getPropertyName: true)).HeaderTextAlign(TextAlign.Center).HeaderText("Stage Name").Width("100px").Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowMatrixGridVM>(g => g.Stage1Approvers, getPropertyName: true)).HeaderTextAlign(TextAlign.Center).HeaderText(matrixList[0].StepName).Width("100px").Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowMatrixGridVM>(g => g.Stage2Approvers, getPropertyName: true)).HeaderTextAlign(TextAlign.Center).HeaderText(matrixList[1].StepName).Width("100px").Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowMatrixGridVM>(g => g.Stage3Approvers, getPropertyName: true)).HeaderTextAlign(TextAlign.Center).HeaderText(matrixList[2].StepName).Width("100px").Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowMatrixGridVM>(g => g.Stage4Approvers, getPropertyName: true)).HeaderTextAlign(TextAlign.Center).HeaderText(matrixList[3].StepName).Width("100px").Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowMatrixGridVM>(g => g.Stage5Approvers, getPropertyName: true)).HeaderTextAlign(TextAlign.Center).HeaderText(matrixList[4].StepName).Width("100px").Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowMatrixGridVM>(g => g.StageApprovedRecipient, getPropertyName: true)).HeaderTextAlign(TextAlign.Center).HeaderText("Approved CC").Width("100px").Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowMatrixGridVM>(g => g.StageRejectedApprovers, getPropertyName: true)).HeaderTextAlign(TextAlign.Center).HeaderText("Rejected CC").Width("100px").Add();
+                                col.Field("Action").HeaderTextAlign(TextAlign.Center).HeaderText("Action").Commands(commands).TextAlign(Syncfusion.EJ2.Grids.TextAlign.Center).Width("100px").Add();
+                            })
+                            .AllowSorting().AllowMultiSorting().GridLines(Syncfusion.EJ2.Grids.GridLine.Both)
+                            .AllowPaging().PageSettings(page => { page.PageSizes(true); }).SearchSettings(search =>
+                            {
+                                search.Fields(new string[] {
+                                    ConversionHelper.GetPropertyDisplayName<WorkflowMatrixGridVM>(g => g.MatrixName, getPropertyName: true)
+                                });
+                            })
+                            .CommandClick("commandClick")
+                            .AllowTextWrap()
+                            .TextWrapSettings(wrap => { wrap.WrapMode(WrapMode.Both); })
+                            .EditSettings(edit => { edit.AllowDeleting(true).ShowDeleteConfirmDialog(true); })
+                            .Toolbar(toolbarItems)
+                            .ToolbarClick("toolbarClick")
+                            .ActionFailure("loadFailed")
+                            .Render()
+                )
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function commandClick(args) {
+        if (args.commandColumn.type == "Edit") {
+            window.location.href = "@Url.Action("MatrixCreateEdit")" + "?id=" + args.rowData.Id;
+        }
+    }
+
+    function toolbarClick(args) {
+        debugger;
+        if (args.item.id === 'Add') {
+            window.location.href = "@Url.Action("MatrixCreateEdit")";
+        }
+    }
+
+    function loadFailed(args) {
+        var newDoc = document.open("text/html", "replace");
+        newDoc.write(args.error.error.responseText);
+        newDoc.close();
+    }
+</script>
+

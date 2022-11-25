@@ -1,0 +1,73 @@
+﻿@using AGTIV.Framework.MVC.Framework.Helper
+@using AGTIV.Framework.MVC.Framework.CredentialManager
+@using AGTIV.Framework.MVC.Framework.Constants
+@using AGTIV.Framework.MVC.UI.ViewModel.Group
+
+@{
+    ViewBag.Title = "Group Maintenance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool isAdmin = UserAccessControl.MatchAnyRoles(ConstantHelper.Role.Admin);
+
+    List<object> commands = new List<object>();
+    commands.Add(new { type = "Edit", buttonOption = new { iconCss = "e-icons e-edit", cssClass = "e-flat" } });
+    commands.Add(new { type = "Delete", buttonOption = new { iconCss = "e-icons e-delete", cssClass = "e-flat" } });
+
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add("Search");
+
+    if(isAdmin)
+    {
+        toolbarItems.Add(new { text = "Add", tooltipText = "Add a new record", id = "Add", prefixIcon = "e-add" });
+    }
+}
+
+<div class="box box-info">
+    <div class="box-header with-border">
+        <h3 class="box-title">Assign users and roles to groups</h3>
+    </div>
+    <div class="box-body">
+        @Html.EJS().Grid("GroupGrid").DataSource(dataManager =>
+        {
+            dataManager.Url(Url.Action("GroupTable")).RemoveUrl(Url.Action("Delete")).Adaptor("UrlAdaptor");
+        }).AllowSorting().AllowMultiSorting().GridLines(Syncfusion.EJ2.Grids.GridLine.Both).ToolbarClick("toolbarClick").Columns(col =>
+        {
+            col.Field(ConversionHelper.GetPropertyDisplayName<GroupVM>(g => g.Name, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<GroupVM>(g => g.Name)).Width("130px").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<GroupVM>(g => g.UsersNameList, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<GroupVM>(g => g.UsersNameList)).AllowSorting(false).Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<GroupVM>(g => g.RoleNameList, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<GroupVM>(g => g.RoleNameList)).AllowSorting(false).Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<GroupVM>(g => g.Id, getPropertyName: true)).IsPrimaryKey(true).Visible(false).Add();
+            col.HeaderText("Actions").Width("130px").Commands(commands).Visible(isAdmin).Add();
+        }).CommandClick("commandClick").EditSettings(edit =>
+        {
+            edit.AllowAdding(isAdmin).AllowDeleting(isAdmin).ShowDeleteConfirmDialog(true);
+        }).Toolbar(toolbarItems).ContextMenuItems(new List<object>() {
+            "AutoFit", "AutoFitAll", "SortAscending", "SortDescending", "Copy", "Delete", "FirstPage", "PrevPage", "LastPage", "NextPage"
+        }).AllowPaging().PageSettings(page => { page.PageSizes(true); }).SearchSettings(search => {
+            search.Fields(new string[] {
+                ConversionHelper.GetPropertyDisplayName<GroupVM>(g => g.Name, getPropertyName: true),
+            });
+        }).RowHeight(40).ActionFailure("loadFailed").Render()
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function commandClick(args) {
+            if (args.commandColumn.type == "Edit") {
+                window.location.href = "@Url.Action("Edit")" + "?id=" + args.rowData.Id;
+            }
+        }
+
+        function toolbarClick(args) {
+            if (args.item.id === 'Add') {
+                window.location.href = "@Url.Action("Create")";
+            }
+        }
+
+        function loadFailed(args) {
+            var newDoc = document.open("text/html", "replace");
+            newDoc.write(args.error.error.responseText);
+            newDoc.close();
+        }
+    </script>
+}

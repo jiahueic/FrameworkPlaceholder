@@ -1,0 +1,33 @@
+﻿@using AGTIV.Framework.MVC.UI.ViewModel.Role
+@model RoleAssignmentPVM
+
+@using (Html.BeginForm("_RoleAssignment", "Role", FormMethod.Post, new { Id = "RoleAssignmentForm" }))
+{
+    <div class="control-section">
+        <div class="form-group row">
+            @Html.HiddenFor(model => model.UserId)
+            @Html.EJS().MultiSelectFor(model => model.SelectedRole).Placeholder("Select roles").DataSource(Model.RoleDLL).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.MultiSelectFieldSettings { Text = "Name", Value = "Name" }).CssClass("e-outline").Render()
+            <label class="message"></label>
+        </div>
+    </div>
+
+    @Html.EJS().Button("assignBtn").Content("Assign").CssClass("e-info").Click("assignBtnClick").Render()
+    @Html.EJS().Button("cancelBtn").Type("Button").Content("Cancel").Click("cancelBtnClick").Render()
+}
+
+<script>
+    var assignBtnClick = function () {
+        var options = {
+            rules: {
+                'SelectedRole': { required: true },
+            },
+            customPlacement: function (error, element) {
+                $(element).insertAfter($('.message'));
+            }
+        };
+        var formObject = new ej.inputs.FormValidator('#RoleAssignmentForm', options);
+        formObject.validate();
+    }
+</script>
+
+@Html.EJS().ScriptManager()

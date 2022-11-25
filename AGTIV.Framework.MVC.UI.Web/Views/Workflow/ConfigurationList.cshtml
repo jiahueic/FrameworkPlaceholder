@@ -1,0 +1,75 @@
+﻿@using AGTIV.Framework.MVC.Framework.Constants;
+@using AGTIV.Framework.MVC.Framework.Helper;
+@using AGTIV.Framework.MVC.UI.ViewModel.Workflow;
+
+@model IEnumerable<WorkflowConfigurationVM>
+
+@{
+    ViewBag.Title = "Workflow Configuration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    List<object> commands = new List<object>();
+    commands.Add(new { type = "Edit", buttonOption = new { iconCss = "e-icons e-edit", cssClass = "e-flat" } });
+
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add("Search");
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Configure workflow stages & email</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <div class="box-body">
+                @(
+                            Html.EJS().Grid("workflowConfigurationGrid")
+                            .DataSource(Model.OrderBy(x => x.InternalStepName.Equals(ConstantHelper.Workflow.d_tblStep.InternalStepName.Start) ? 0 : 99)).Columns(col =>
+                            {
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowConfigurationVM>(g => g.StepId, getPropertyName: true)).IsPrimaryKey(true).Visible(false).Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowConfigurationVM>(g => g.ActionId, getPropertyName: true)).Visible(false).Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowConfigurationVM>(g => g.StepName, getPropertyName: true)).HeaderText("Matrix Name").Width("100px").Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowConfigurationVM>(g => g.EmailSubject, getPropertyName: true)).HeaderText("Email Subject").Width("130px").Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowConfigurationVM>(g => g.EmailBody, getPropertyName: true)).HeaderText("Email Body").Width("130px").Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowConfigurationVM>(g => g.TaskUrl, getPropertyName: true)).HeaderText("Task URL").Width("100px").Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowConfigurationVM>(g => g.IsSingleApproverStr, getPropertyName: true)).HeaderText("Only 1 Approval Required").Width("150px").Add();
+                                col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowConfigurationVM>(g => g.DueDateDay, getPropertyName: true)).HeaderText("Due Date (Day)").Width("130px").Add();
+                                col.Field("Action").HeaderText("Action").HeaderTextAlign(Syncfusion.EJ2.Grids.TextAlign.Center).TextAlign(Syncfusion.EJ2.Grids.TextAlign.Center).Width("80px").Commands(commands).Add();
+                            })
+                            .CommandClick("commandClick")
+                            .Toolbar(toolbarItems).ToolbarClick("toolbarClick")
+                            .AllowSorting().AllowMultiSorting().GridLines(Syncfusion.EJ2.Grids.GridLine.Both)
+                            .AllowPaging().PageSettings(page => { page.PageSizes(true); }).SearchSettings(search =>
+                            {
+                                search.Fields(new string[] {
+            ConversionHelper.GetPropertyDisplayName<WorkflowConfigurationVM>(g => g.StepName, getPropertyName: true)
+                                });
+                            })
+                            .Render()
+                )
+            </div>
+            @*<div class="box-footer">
+                    <button type="submit" class="btn btn-primary pull-right">Update Details</button>
+                </div>*@
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function commandClick(args) {
+        if (args.commandColumn.type == "Edit") {
+            window.location.href = "@Url.Action("ConfigurationEdit")" + '?stepId=' + args.rowData.StepId + "&actionId=" + args.rowData.ActionId;
+        }
+    }
+
+    function toolbarClick(args) {
+    }
+</script>

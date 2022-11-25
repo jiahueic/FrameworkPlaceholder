@@ -1,0 +1,75 @@
+﻿@using AGTIV.Framework.MVC.Framework.Helper
+@using AGTIV.Framework.MVC.Framework.CredentialManager
+@using AGTIV.Framework.MVC.Framework.Constants
+@using AGTIV.Framework.MVC.UI.ViewModel.ElmahLog
+@using Syncfusion.EJ2.Grids;
+
+@{
+    ViewBag.Title = "Elmah Log";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool isAdmin = UserAccessControl.MatchAnyRoles(ConstantHelper.Role.Admin);
+
+    List<object> commands = new List<object>();
+    commands.Add(new { type = "View", buttonOption = new { iconCss = "e-icons e-de-outdent", cssClass = "e-flat" } });
+
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add("Search");
+
+    List<object> cols = new List<object>();
+    cols.Add(new { field = ConversionHelper.GetPropertyDisplayName<ElmahErrorVM>(g => g.TimeUtc, getPropertyName: true), direction = "Descending" });
+}
+
+<div class="e-card card">
+    <div class="e-card-content">
+        @(
+            Html.EJS().Grid("ElmahGrid").DataSource(dataManager =>
+            {
+                dataManager.Url(Url.Action("ElmahTable")).Adaptor("UrlAdaptor");
+            })
+            .AllowSorting().AllowMultiSorting().GridLines(Syncfusion.EJ2.Grids.GridLine.Both).ToolbarClick("toolbarClick")
+            .Columns(col =>
+            {
+                col.Field(ConversionHelper.GetPropertyDisplayName<ElmahErrorVM>(g => g.ErrorId, getPropertyName: true)).IsPrimaryKey(true).HeaderTextAlign(TextAlign.Center).HeaderText(ConversionHelper.GetPropertyDisplayName<ElmahErrorVM>(g => g.ErrorId)).Width("130px").Add();
+                col.Field(ConversionHelper.GetPropertyDisplayName<ElmahErrorVM>(g => g.Application, getPropertyName: true)).HeaderTextAlign(TextAlign.Center).HeaderText(ConversionHelper.GetPropertyDisplayName<ElmahErrorVM>(g => g.Application)).Width("100px").Add();
+                col.Field(ConversionHelper.GetPropertyDisplayName<ElmahErrorVM>(g => g.Type, getPropertyName: true)).HeaderTextAlign(TextAlign.Center).HeaderText(ConversionHelper.GetPropertyDisplayName<ElmahErrorVM>(g => g.Type)).Width("100px").Add();
+                col.Field(ConversionHelper.GetPropertyDisplayName<ElmahErrorVM>(g => g.Message, getPropertyName: true)).HeaderTextAlign(TextAlign.Center).HeaderText(ConversionHelper.GetPropertyDisplayName<ElmahErrorVM>(g => g.Message)).AllowSorting(false).Width("130px").Add();
+                col.Field(ConversionHelper.GetPropertyDisplayName<ElmahErrorVM>(g => g.TimeUtc, getPropertyName: true)).HeaderTextAlign(TextAlign.Center).HeaderText(ConversionHelper.GetPropertyDisplayName<ElmahErrorVM>(g => g.TimeUtc)).Format(new { type = "dateTime", format="yyyy-MM-dd hh:mm:ss"}).Width("130px").Add();
+                col.HeaderTextAlign(TextAlign.Center).HeaderText("Action").TextAlign(TextAlign.Center).Width("75px").Commands(commands).Add();
+            }).CommandClick("commandClick").EditSettings(edit =>
+            {
+                edit.AllowAdding(isAdmin).AllowDeleting(isAdmin).ShowDeleteConfirmDialog(true);
+            }).Toolbar(toolbarItems).ContextMenuItems(new List<object>() {
+                "AutoFit", "AutoFitAll", "SortAscending", "SortDescending", "Copy", "FirstPage", "PrevPage", "LastPage", "NextPage"
+            }).AllowPaging().PageSettings(page => { page.PageSizes(true); })
+            .SearchSettings(search =>
+            {
+                search.Fields(new string[] {
+                    ConversionHelper.GetPropertyDisplayName<ElmahErrorVM>(g => g.ErrorId, getPropertyName: true),
+                    ConversionHelper.GetPropertyDisplayName<ElmahErrorVM>(g => g.Application, getPropertyName: true),
+                });
+            })
+            .SortSettings(sort => sort.Columns(cols))
+            .ActionFailure("loadFailed")
+            .RowHeight(40).Render()
+        )
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function commandClick(args) {
+            if (args.commandColumn.type == "View") {
+                window.location.href = "@Url.Action("ElmahDetail")" + "?errorId=" + args.rowData.ErrorId;
+            }
+        }
+
+        function toolbarClick(args) { }
+
+        function loadFailed(args) {
+            var newDoc = document.open("text/html", "replace");
+            newDoc.write(args.error.error.responseText);
+            newDoc.close();
+        }
+    </script>
+}

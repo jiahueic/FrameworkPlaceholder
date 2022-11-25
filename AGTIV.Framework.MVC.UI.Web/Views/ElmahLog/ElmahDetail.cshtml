@@ -1,0 +1,100 @@
+﻿@using AGTIV.Framework.MVC.Framework.Helper;
+@using AGTIV.Framework.MVC.UI.ViewModel.ElmahLog;
+@using System.Web.UI.WebControls;
+
+@model ElmahErrorVM
+@{
+    ViewBag.Title = "Elmah Log - Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                @*<h3 class="box-title"><b>Error Id - @Model.ErrorId</b></h3>*@
+                <h3 class="box-title">
+                    <b>@Model.Message</b>
+                </h3>
+            </div>
+            <div class="box-body">
+                <div class="row ">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <pre>
+                                @for (int i = 0; i < Model.Error.DetailSplit.Length; i++)
+                                {
+                                    var text = Model.Error.DetailSplit[i];
+                                    if (i == 0)
+                                    {
+                                        @text
+                                    }
+                                    else
+                                    {
+                                        @("at " + text)
+                                    }
+
+                                } 
+                            </pre>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @string.Format(
+                                @"Logged on {0} at {1}",
+                                Model.Error.Time.ToLongDateString(),
+                                Model.Error.Time.ToLongTimeString())
+                        </div>
+                       
+                        <div class="form-group">
+                            <p>See also:</p>
+                            <ul>
+                                <li>
+                                    Raw/Source data in
+                                    <a rel="alternate"
+                                       type="application/xml"
+                                       href="xml@(Request.Url.Query)">XML</a>
+                                    or in
+                                    <a rel="alternate"
+                                       type="application/json"
+                                       href="json@(Request.Url.Query)">JSON</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @(
+                                Html.EJS().Grid("ElmahGrid")
+                                .DataSource(Model.Error.ServerVariables != null ? Model.Error.ServerVariables.Item.OrderBy(x => x.Name) : new List<Item>().AsEnumerable())
+                                .GridLines(Syncfusion.EJ2.Grids.GridLine.Both)
+                                .Columns(col =>
+                                {
+                                    col.Field("Name").HeaderText("Name").Add();
+                                    col.Field("Value.String").HeaderText("Value").Add();
+                                }).Render()
+                            )
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer" style="text-align:right;">
+                @Html.EJS().Button("btnBack").Type("button").Content("Back").Click("redirectTo").Render()
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function redirectTo() {
+        location.href = '@Url.Action("Index", "ElmahLog")';
+    }
+</script>
+

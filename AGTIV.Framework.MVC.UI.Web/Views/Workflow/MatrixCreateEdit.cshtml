@@ -1,0 +1,125 @@
+﻿@model AGTIV.Framework.MVC.UI.ViewModel.Workflow.WorkflowMatrixCreateEditVM
+
+@{
+    ViewBag.Title = "Workflow Matrix - " + (Model.Id == Guid.Empty ? "Create" : "Edit");
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Stage1Id)
+    @Html.HiddenFor(model => model.Stage2Id)
+    @Html.HiddenFor(model => model.Stage3Id)
+    @Html.HiddenFor(model => model.Stage4Id)
+    @Html.HiddenFor(model => model.Stage5Id)
+    @Html.HiddenFor(model => model.StageApprovedId)
+    @Html.HiddenFor(model => model.StageRejectedId)
+
+    for (int i = 0; i < Model.UserList.Count; i++)
+    {
+        @Html.HiddenFor(model => Model.UserList[i].Id)
+        @Html.HiddenFor(model => Model.UserList[i].FullName)
+    }
+
+    for (int i = 0; i < Model.GroupList.Count; i++)
+    {
+        @Html.HiddenFor(model => Model.GroupList[i].Id)
+        @Html.HiddenFor(model => Model.GroupList[i].Name)
+    }
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">@(Model.Id == Guid.Empty ? "Create New Workflow Matrix" : $"Edit - {Model.MatrixName} Matrix")</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.MatrixName)
+                                </div>
+                                @Html.EJS().TextBoxFor(model => model.MatrixName).Placeholder("Matrix Name").CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.Stage1Approvers)
+                                </div>
+                                @Html.EJS().MultiSelectFor(model => model.Stage1Approvers).Placeholder("Stage 1 Approvers").DataSource((IEnumerable<object>)Model.Approvers).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.MultiSelectFieldSettings { Value = "Id", Text = "FullName" }).CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.Stage2Approvers)
+                                </div>
+                                @Html.EJS().MultiSelectFor(model => model.Stage2Approvers).Placeholder("Stage 2 Approvers").DataSource((IEnumerable<object>)Model.Approvers).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.MultiSelectFieldSettings { Value = "Id", Text = "FullName" }).CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.Stage3Approvers)
+                                </div>
+                                @Html.EJS().MultiSelectFor(model => model.Stage3Approvers).Placeholder("Stage 3 Approvers").DataSource((IEnumerable<object>)Model.Approvers).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.MultiSelectFieldSettings { Value = "Id", Text = "FullName" }).CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.Stage4Approvers)
+                                </div>
+                                @Html.EJS().MultiSelectFor(model => model.Stage4Approvers).Placeholder("Stage 4 Approvers").DataSource((IEnumerable<object>)Model.Approvers).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.MultiSelectFieldSettings { Value = "Id", Text = "FullName" }).CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.Stage5Approvers)
+                                </div>
+                                @Html.EJS().MultiSelectFor(model => model.Stage5Approvers).Placeholder("Stage 5 Approvers").DataSource((IEnumerable<object>)Model.Approvers).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.MultiSelectFieldSettings { Value = "Id", Text = "FullName" }).CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.StageApprovedRecipient)
+                                </div>
+                                @Html.EJS().MultiSelectFor(model => model.StageApprovedRecipient).Placeholder("Approved CC").DataSource((IEnumerable<object>)Model.Approvers).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.MultiSelectFieldSettings { Value = "Id", Text = "FullName" }).CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    @Html.LabelFor(model => model.StageRejectedApprovers)
+                                </div>
+                                @Html.EJS().MultiSelectFor(model => model.StageRejectedApprovers).Placeholder("Rejected CC").DataSource((IEnumerable<object>)Model.Approvers).AllowFiltering(true).Fields(new Syncfusion.EJ2.DropDowns.MultiSelectFieldSettings { Value = "Id", Text = "FullName" }).CssClass("e-outline").Render()
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer" style="text-align:right;">
+                    @Html.EJS().Button("btnSave").Type("submit").Content(Model.Id == Guid.Empty ? "Create" : "Save").CssClass("e-primary").Render()
+                    &nbsp;
+                    @Html.EJS().Button("btnBack").Type("button").Content("Back").Click("redirectTo").CssClass("").Render()
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    function redirectTo() {
+        location.href = '@Url.Action("MatrixList", "Workflow")';
+    }
+</script>

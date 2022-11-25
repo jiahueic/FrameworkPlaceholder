@@ -1,0 +1,26 @@
+﻿@using AGTIV.Framework.MVC.UI.ViewModel.Chart
+@model List<BarChartVM>
+
+@{
+    ViewBag.Title = "Total Subrequests By Subcategories";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-info">
+    <div class="box-header with-border">
+        <h3 class="box-title">Total Subrequests By Subcategories</h3>
+    </div>
+    <div class="box-body">
+        @Html.EJS().Chart("totalSubrequestsChart").Series(series =>
+        {
+            series.Type(Syncfusion.EJ2.Charts.ChartSeriesType.Bar)
+            .XName("X")
+            .YName("Y")
+            .DataSource(Model)
+            .Name("Subrequest")
+            .Add();
+        }).PrimaryXAxis(px => px.Interval(1).ValueType(Syncfusion.EJ2.Charts.ValueType.Category)
+        .IsIndexed(true)).Title("Total Subrequests By Subcategories").Render()
+    </div>
+</div>
+

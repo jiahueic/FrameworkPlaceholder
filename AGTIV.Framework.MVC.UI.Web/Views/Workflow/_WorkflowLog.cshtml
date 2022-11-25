@@ -1,0 +1,15 @@
+﻿@using AGTIV.Framework.MVC.Framework.Helper
+@using AGTIV.Framework.MVC.UI.ViewModel.Workflow
+@model int
+
+<div class="box box-info">
+    <div class="box-body">
+        @Html.EJS().Grid("WorkflowLogGrid").DataSource(dataManager => { dataManager.Url(Url.Action("_WorkflowLog", new { processId = Model })).Adaptor("UrlAdaptor"); }).GridLines(Syncfusion.EJ2.Grids.GridLine.Both).Columns(col =>
+        {
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowLogVM>(m => m.LogDate, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<WorkflowLogVM>(m => m.LogDate)).Format("dd/MM/yyyy").Width("130").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowLogVM>(m => m.LogType, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<WorkflowLogVM>(m => m.LogType)).Width("130").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowLogVM>(m => m.Description, getPropertyName: true)).Width("600px").Add();
+            col.Field(ConversionHelper.GetPropertyDisplayName<WorkflowLogVM>(m => m.LogByName, getPropertyName: true)).HeaderText(ConversionHelper.GetPropertyDisplayName<WorkflowLogVM>(m => m.LogByName)).Width("150").Add();
+        }).ContextMenuItems(new List<object>() { "AutoFit", "AutoFitAll", "Copy" }).AllowTextWrap().RowHeight(50).ActionFailure("loadFailed").Render()
+    </div>
+</div>
